@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "787553206390",
+      "project_id": "fir-formfilling",
+      "storage_bucket": "fir-formfilling.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:787553206390:android:1f87843b4f2702e8fb1f57",
+          "android_client_info": {
+            "package_name": "com.example.flutter_application_1"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyBRdShH5U7e4sFHDiTNyl33idCiqxw4F5U"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
