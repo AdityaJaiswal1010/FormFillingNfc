@@ -20,7 +20,7 @@ class _AdminPageState extends State<AdminPage> {
           children: [
             
             const Text(
-              "Form",
+              "Admin Pannel",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               
             ),
@@ -30,7 +30,7 @@ class _AdminPageState extends State<AdminPage> {
         ),
       ),
       body: Container(
-        
+
       ),
     );
 
