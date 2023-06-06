@@ -124,10 +124,8 @@ Widget forgetPassword(BuildContext context) {
         {
           flag=1;
           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => AdminPage())).onError((error, stackTrace) {
-                        print("Error ${error.toString()}");
-                      });
-        }
+                            MaterialPageRoute(builder: (context) => AdminPage()));
+        }else{
         FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot? snapshot) {
           snapshot!.docs.forEach((document) { 
             if(document['email'].toString()==_emailTextController.text.toString()){
@@ -139,7 +137,7 @@ Widget forgetPassword(BuildContext context) {
                         MaterialPageRoute(builder: (context) => HomeScreen(childid.toString())));
                             }
           });
-        },);
+        },);}
         print('flag');
         print(flag);
         print(adminlist);

@@ -7,6 +7,7 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     controller: controller,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
+    
     autocorrect: !isPasswordType,
     cursorColor: Colors.black,
     style: TextStyle(color: Colors.grey.withOpacity(0.9)),
