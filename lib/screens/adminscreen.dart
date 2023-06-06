@@ -64,7 +64,7 @@ class _AdminPageState extends State<AdminPage> {
                         snapshot!.docs.forEach((document){
                           if(document['email'].toString()==_adminEnteredEmailTextController.text.toString()){
                             
-                              childid=document['childid'].toString();
+                              childid=document.get('childid').toString();
                               print(document['childid'].toString());
                             FirebaseFirestore.instance.collection('forms').doc(document['childid'].toString()).get().then((value) {
                         emailFromDb=value['email'];

@@ -237,14 +237,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     print('Download url : ${urlDownload}');  // store thia link to nfc
                     
                     //add pdf link to the loggedin persons form collection and create tile in the map for subject
-                    (_typeTextController.text.toString().toLowerCase()=='reg')?
+                    (_typeTextController.text.toString().toLowerCase()=='reg')?{
                     FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
                       'pdflink': urlDownload,
-                      'subjects': {_semTextController.text.toString(): _selectedSubject}
-                    }):FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
+                      // 'subjects': {_semTextController.text.toString(): _selectedSubject}
+                    }),
+                    
+                    
+                    }:FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
                       'pdflink': urlDownload,
                       // 'subjects': {_semTextController.text.toString(): _selectedSubject}
                     });
+                    Map<String, List> mapData={
+                      _semTextController.text.toString(): _selectedSubject.toList()
+                    };
+                    var semi=int.parse(_semTextController.text.toString());
+                    assert(semi is int);
+                    (_typeTextController.text.toString().toLowerCase()=='reg')?
+                        FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
+                          'subjects.${_semTextController.text.toString()}': _selectedSubject
+                    }):null;
                     // FirebaseFirestore.instance.collection(collectionPath)
                       // path1 = results.files.single.path;
                       // fileName1 = results.files.single.name;
