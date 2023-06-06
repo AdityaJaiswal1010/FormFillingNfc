@@ -92,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
                           //  'id': id.toString(),                 
                           'name': _userNameTextController.text.trim().toString(),
                           'email': _emailTextController.text.trim().toString(),
-                          'subjects':[],
+                          'subjects':{},
                           'pdflink':'', 
                         })
                        .then((DocumentReference doc){

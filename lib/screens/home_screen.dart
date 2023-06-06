@@ -96,7 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _divisionTextController = TextEditingController();
   TextEditingController _rollNoTextController = TextEditingController();
   TextEditingController _semTextController = TextEditingController();
-  
+    TextEditingController _typeTextController = TextEditingController();
+
   
   @override
   
@@ -170,6 +171,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+                reusableTextField("Exam Type? (kt or reg)", Icons.lock_outlined, false,
+                    _typeTextController),
+                const SizedBox(
+                  height: 20,
+                ),
+                (_typeTextController.text.toString().toLowerCase()=='reg')?
                 Column(
                   crossAxisAlignment:CrossAxisAlignment.start,
                   children: [
@@ -187,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ))
                   .toList(),
             )
-                ],),
+                ],):Column(children: [],),
                 
                 Column(
                   children: [
@@ -230,9 +237,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     print('Download url : ${urlDownload}');  // store thia link to nfc
                     
                     //add pdf link to the loggedin persons form collection and create tile in the map for subject
+                    (_typeTextController.text.toString().toLowerCase()=='reg')?
                     FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
                       'pdflink': urlDownload,
-                      'subjects': _selectedSubject
+                      'subjects': {_semTextController.text.toString(): _selectedSubject}
+                    }):FirebaseFirestore.instance.collection('forms').doc(this.widget.child).update({
+                      'pdflink': urlDownload,
+                      // 'subjects': {_semTextController.text.toString(): _selectedSubject}
                     });
                     // FirebaseFirestore.instance.collection(collectionPath)
                       // path1 = results.files.single.path;

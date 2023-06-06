@@ -61,9 +61,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       .then((value) {
                         getdata();
                         
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
                   });
+                  // .onError((error, stackTrace) {
+                  //   print("Error ${error.toString()}");
+                  // });
                 }),
                 signUpOption()
               ],
