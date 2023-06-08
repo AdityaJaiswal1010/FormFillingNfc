@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/reusable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,10 +14,11 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  var snapshot;
   String childid='';
   String nameFromDb='';
   String emailFromDb='';
-  List<String> subjectsFromDb=[];
+  List<dynamic> subjectsFromDb=[];
         TextEditingController _adminEnteredSemTextController = TextEditingController();
 
       TextEditingController _adminEnteredEmailTextController = TextEditingController();
@@ -60,21 +63,13 @@ class _AdminPageState extends State<AdminPage> {
                   height: 15,
                 ),
                     ElevatedButton.icon(onPressed:() {
-                      FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot? snapshot) {
-                        snapshot!.docs.forEach((document){
-                          if(document['email'].toString()==_adminEnteredEmailTextController.text.toString()){
-                            
-                              childid=document.get('childid').toString();
-                              print(document['childid'].toString());
-                            FirebaseFirestore.instance.collection('forms').doc(document['childid'].toString()).get().then((value) {
-                        emailFromDb=value['email'];
-                        nameFromDb=value['name'];
-                        subjectsFromDb=value['subjects'][_adminEnteredSemTextController.text.toString()];
-                      });
-                            
-                          }
-                        });
-                      });
+                      snapshot=FirebaseFirestore.instance.collection('users').get().then((value){
+                        _fetchData();
+                      }
+                        
+                      );
+                        
+                      
                       
                         
                     }, icon: Icon(Icons.search), label: Text('Admin entered email')),
@@ -93,5 +88,32 @@ class _AdminPageState extends State<AdminPage> {
       ),
     );
 
+  }
+  Future<void> _fetchData() async{
+    FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot? querySnapshot){
+      querySnapshot!.docs.forEach((document){
+                          if(document['email'].toString()==_adminEnteredEmailTextController.text.toString()){
+                            setState(() {
+                              childid=document['childid'].toString();
+                            });
+                              
+                              print(document['childid'].toString());
+                              print(childid);
+                            FirebaseFirestore.instance.collection('forms').doc('${document['childid'].toString()}').get().then((value) {
+                        emailFromDb=value['email'];
+                        nameFromDb=value['name'];
+                        print(emailFromDb);
+                        print(nameFromDb);
+                        emailFromDb.replaceAll('', value['email']);
+                        nameFromDb.replaceAll('', value['name']);
+                        subjectsFromDb=value['subjects.${_adminEnteredSemTextController.text.toString()}'];
+                        print(subjectsFromDb);
+                      });
+                            
+                          }
+                        }
+                        );
+    });
+    
   }
 }
