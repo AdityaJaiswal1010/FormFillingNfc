@@ -74,11 +74,11 @@ class _AdminPageState extends State<AdminPage> {
                         
                     }, icon: Icon(Icons.search), label: Text('Admin entered email')),
                     Column(children: [
-                      Row(children: [
+                      
                         Text("name : {$nameFromDb}"),
                         Text("email : {$emailFromDb}"),
                         Text("subjects : {$subjectsFromDb}")
-                      ],)
+                      
                     ],)
             ],
           ),
@@ -100,13 +100,17 @@ class _AdminPageState extends State<AdminPage> {
                               print(document['childid'].toString());
                               print(childid);
                             FirebaseFirestore.instance.collection('forms').doc('${document['childid'].toString()}').get().then((value) {
-                        emailFromDb=value['email'];
-                        nameFromDb=value['name'];
+                        
+                        setState(() {
+                          emailFromDb=value['email'].toString();
+                        nameFromDb=value['name'].toString();
+                        subjectsFromDb=value['subjects.${_adminEnteredSemTextController.text.toString()}'];
+                        });
                         print(emailFromDb);
                         print(nameFromDb);
-                        emailFromDb.replaceAll('', value['email']);
-                        nameFromDb.replaceAll('', value['name']);
-                        subjectsFromDb=value['subjects.${_adminEnteredSemTextController.text.toString()}'];
+                        // _setData(value['email'].toString());
+                        
+                        
                         print(subjectsFromDb);
                       });
                             
