@@ -94,6 +94,8 @@ class _SignUpScreenState extends State<SignUpScreen>{
                           'email': _emailTextController.text.trim().toString(),
                           'subjects':{},
                           'pdflink':'', 
+                          'results': {},
+                          'marksheet': {}
                         })
                        .then((DocumentReference doc){
                         var newusersdoc=FirebaseFirestore.instance.collection('users').doc();
