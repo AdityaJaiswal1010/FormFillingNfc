@@ -15,7 +15,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:csv/csv.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../storage_services/storageService.dart';
 import '../widgets/constants.dart';
@@ -346,6 +347,7 @@ class _AdminPageState extends State<AdminPage> {
                       //  storage.uploadfiles(path1, fileName1).then((value) => print('Done'));
 
                     }, child: Text('Select Hallticket'),),
+                    ElevatedButton(onPressed: exportData, child: Text('Export data')),
               ],
               
             ),
@@ -403,10 +405,13 @@ class _AdminPageState extends State<AdminPage> {
     row.cells[0].value =nameFromDb.toString();
     row.cells[1].value = _adminEnteredEmailTextController.text.toString();
     String allmarks='';
-    result.forEach((element) {
-      allmarks+=element+'\n';
-    });
-    row.cells[2].value = allmarks;
+    for(int i=0;i<result.length;i++){
+      allmarks+=result[i].toString()+'\n';
+    };
+    List<dynamic> rdata=result;
+     //now when we call prev result all the recent result will be fetched as it is replaces
+     _getPrevResult();
+    row.cells[2].value = prevResult;
     row.cells[3].value=_adminEnteredSemTextController.text.toString();
     row.cells[4].value=subjectsFromDb.toString();
 
@@ -427,6 +432,24 @@ class _AdminPageState extends State<AdminPage> {
     
     document.dispose();
     saveAndLaunchFile(bytes,nameFromDb.toString()+'Marksheet sem ${_adminEnteredSemTextController.text.toString()}.pdf');
+  }
+
+  void exportData() async{
+    final CollectionReference colref=FirebaseFirestore.instance.collection('forms');
+    final myData = await rootBundle.loadString('lib/res/Untitled spreadsheet - Sheet1.csv'); 
+
+    List<List<dynamic>> csvTable=CsvToListConverter().convert(myData);
+
+    List<List<dynamic>> data=[];
+
+    data=csvTable;
+    for(var i=1;i<data.length;i++){
+      FirebaseFirestore.instance.collection('forms').add({
+        'name': data[i][0],
+        'email': data[i][1],
+
+      });
+    }
   }
   Future<void> _fetchData() async{
     FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot? querySnapshot){
