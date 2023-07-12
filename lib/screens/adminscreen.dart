@@ -42,6 +42,7 @@ class _AdminPageState extends State<AdminPage> {
   List<String> prevResult=[];
   PlatformFile? pickedPdf;
   int index=0;
+  List <String> headers=[];
   List<String> result = [];
   TextEditingController _temp = TextEditingController();
   TextEditingController _temp1 = TextEditingController();
@@ -436,19 +437,59 @@ class _AdminPageState extends State<AdminPage> {
 
   void exportData() async{
     final CollectionReference colref=FirebaseFirestore.instance.collection('forms');
-    final myData = await rootBundle.loadString('lib/res/Untitled spreadsheet - Sheet1.csv'); 
+    final myData = await rootBundle.loadString('lib/res/marksheet.csv'); 
 
     List<List<dynamic>> csvTable=CsvToListConverter().convert(myData);
 
     List<List<dynamic>> data=[];
 
     data=csvTable;
-    for(var i=1;i<data.length;i++){
-      FirebaseFirestore.instance.collection('forms').add({
-        'name': data[i][0],
-        'email': data[i][1],
-
+    for(var i=0;i<data[0].length;i++)
+    {
+      setState(() {
+        headers.add(data[0][i]);
       });
+    }
+    print(headers);
+    // for(var i=1;i<data.length;i++){
+    //   FirebaseFirestore.instance.collection('forms').add({
+    //     'name': data[i][0],
+    //     'email': data[i][1],
+
+    //   });
+    // }
+    int flag=1;
+    
+    for(var i=1;i<data.length;i++)
+    {
+      setState(() {
+        flag=1;
+      });
+      // var docId=FirebaseFirestore.instance.collection('forms').doc();
+      // var docIdForUsers=FirebaseFirestore.instance.collection('users').doc();
+    
+        FirebaseFirestore.instance.collection('forms').add({
+          for(var k=0;k<data[i].length;k++)
+          
+                          headers[k]: data[i][k],
+                        }).then((DocumentReference docId){
+                         
+                      FirebaseFirestore.instance.collection('users').add({
+                        headers[0]: data[i][0],
+                        'childid': docId.id.toString(),
+                        headers[1]: data[i][1],
+                        headers[2]: data[i][2],
+                        headers[3]: data[i][3],
+                        headers[4]: data[i][4],
+                        headers[5]: data[i][5],
+                        // headers[6]: data[i][6],
+                        
+                      });
+                      setState(() {
+                        flag=0;
+                      });
+                     
+                        });
     }
   }
   Future<void> _fetchData() async{
